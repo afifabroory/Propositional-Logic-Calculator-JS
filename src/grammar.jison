@@ -1,6 +1,6 @@
 %{
     function add_var(name) {
-        _vars_context[name] = false;
+        _vars_context.set(name, false);
     }
 
     function add_opt_node(optype, left_node, right_node) {
