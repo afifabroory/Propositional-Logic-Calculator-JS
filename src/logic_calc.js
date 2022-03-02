@@ -1,8 +1,8 @@
 // Should reset if parse new formula
-var _vars_context = new Map();
-var _var_row = [];
-var _result_row = [];
-var _store_AST = false;
+var _vars_context;
+var _var_row;
+var _result_row;
+var _store_AST;
 var _ast;
 
 function lookup_var_context(name) {
@@ -47,4 +47,15 @@ function generate_truth_table() {
         _var_row.push(clone_vars_context);
         _result_row.push(eval_ast(_ast));
     }
+}
+
+function eval_expr(expr) {
+    _vars_context = new Map();
+    _var_row = [];
+    _result_row = [];
+    _store_AST = false;
+    _ast = grammar.parse(expr);
+    generate_truth_table(_ast);
+    console.log(_var_row);
+    console.log(_result_row);
 }
