@@ -23,33 +23,35 @@
 
 %lex
 
-%option caseless
+%options case-insensitive
+
 %%
 
-"&"|"*"|"and"|"dan"     { return 'CONJ'; }
-"|"|"+"|"or"|"atau"     { return 'DISJ'; }
-"~"|"!"|"not"|"bukan"   { return 'NEG'; }
-"->"|"=>"               { return 'IMP'; }
-"="|"<->"|"<=>"         { return 'EQUV'; }
-"("|"{"|"["             { return '('; }
-")"|"}"|"]"             { return ')'; }
-"1"[a-z]+|"0"[a-z]+     /* Ignore */
-"true"|"benar"|"1"      { 
-                            yylval = true;
-                            return 'CONST'; 
-                        }
-"false"|"salah"|"0"     { 
-                            yylval = false;
-                            return 'CONST'; 
-                        }
-[a-z][a-z0-9_]*         { 
-                            if (!_store_AST) _store_AST = true;
-                            add_var(yytext);
-                            yylval = yytext;
-                            return 'VAR'; 
-                        }
-[0-9]+|[ \t\n]|.        /* Ignore */
-<<EOF>>                 { return 'EOF'; }
+"&"|"*"|"and"|"dan"         { return 'CONJ'; }
+"|"|"+"|"or"|"atau"         { return 'DISJ'; }
+"~"|"!"|"not"|"bukan"       { return 'NEG'; }
+"->"|"=>"                   { return 'IMP'; }
+"="|"<->"|"<=>"             { return 'EQUV'; }
+"("|"{"|"["                 { return '('; }
+")"|"}"|"]"                 { return ')'; }
+"1"[a-zA-Z]+|"0"[a-zA-Z]+   { return yytext; }
+"true"|"benar"|"1"          { 
+                                yylval = true;
+                                return 'CONST'; 
+                            }
+"false"|"salah"|"0"         { 
+                                yylval = false;
+                                return 'CONST'; 
+                            }
+[a-zA-Z][a-zA-Z0-9_]*       { 
+                                if (!_store_AST) _store_AST = true;
+                                add_var(yytext);
+                                yylval = yytext;
+                                return 'VAR'; 
+                            }
+[ \t\n]+                    // Ignore
+[0-9]+|.                    { return yytext; }
+<<EOF>>                     { return 'EOF'; }
 
 /lex
 
