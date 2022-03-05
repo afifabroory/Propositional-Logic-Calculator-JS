@@ -46,7 +46,7 @@
 [a-zA-Z][a-zA-Z0-9_]*       { 
                                 if (!_store_AST) _store_AST = true;
                                 add_var(yytext.toUpperCase());
-                                yylval = yytext;
+                                yylval = yytext.toUpperCase();
                                 return 'VAR'; 
                             }
 [ \t\n]+                    // Ignore
