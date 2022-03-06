@@ -111,7 +111,7 @@ function App() {
 
     const Main = (
         <ThemeProvider theme={InputTheme}>
-            <Paper elevation={0} autoComplete="off" sx={{
+            <Paper component="form" elevation={0} autoComplete="off" onSubmit={(e) => {e.preventDefault()}} sx={{
                 border: 0.1,
                 borderColor: '#B6B6B6',
                 p: '6px 0px',
