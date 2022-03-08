@@ -1,6 +1,8 @@
 %{
+    let _store_AST = false;
+    
     function add_var(name) {
-        _vars_context.set(name, false);
+        symbolTable.set(name, false);
     }
 
     function add_opt_node(optype, left_node, right_node) {
