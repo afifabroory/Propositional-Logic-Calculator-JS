@@ -1,11 +1,20 @@
-var symbolTable = new Map();
+var symbolTable = new Map();    // Don't change anything from this line!
 
 class PropositionalLogic {
     #varRowContext = [];
     #resultRow = [];
     #ast = null;
 
-    constructor() {}
+    constructor() {
+        this.#resetVars();
+    }
+
+    #resetVars() {
+        symbolTable = new Map();    // global variable
+        this.#varRowContext = [];
+        this.#resultRow = [];
+        this.#ast = null;
+    }
 
     #getVarContext(name) {
         return symbolTable.get(name);
@@ -21,6 +30,32 @@ class PropositionalLogic {
 
     getResultRow() {
         return this.#resultRow;
+    }
+
+    getResult() {
+        return this.#ast['t_val'];
+    }
+
+    itsGeneratedAST() {
+        return this.#ast['type'] !== 'NODE_CONST';
+    }
+
+    //  1 : Tautology
+    //  0 : Contingency
+    // -1 : Contradiction
+    getStatementType() {
+        if (this.itsGeneratedAST()) {
+            let totalTrue = 0, totalFalse = 0;
+            for (let i = 0; i < this.#resultRow.length; i++) {
+                if (this.#resultRow[i]) totalTrue++;
+                else totalFalse++;
+            }
+            if (totalFalse === 0) return 1;
+            else if (totalTrue === 0) return -1;
+            else if (totalTrue !== 0 && totalFalse !== 0) return 0;
+        } else {
+            return this.#ast ? 1 : -1;
+        }
     }
 
     #evalAST(node) {
@@ -46,8 +81,9 @@ class PropositionalLogic {
     }
 
     eval(expr) {
+        this.#resetVars();
         this.#ast = grammar.parse(expr);
-        this.#generateTruthTable();
+        if (this.itsGeneratedAST()) this.#generateTruthTable(); 
     }
 
     #generateTruthTable() {
